@@ -1,4 +1,5 @@
 //TODO: way too many comments, finish 3rd algo, error catching
+//left off at trying to fix default constructor stuff
 
 #include <vector>
 #include <iostream>
@@ -9,7 +10,7 @@ using namespace std;
 //a class to represent a process 
 class Process {
 public:
-	Process(); //default constructor, does nothing
+	//Process(); 
 	Process(vector<int>, int); //constructor to fill the process with the bursts and ID number
 	bool isIOcomplete(int); //function to see if done with I/O
 	vector<int> bursts; //vector of ints containing CPU and I/O bursts
@@ -20,25 +21,22 @@ public:
 	int responseTime = -1; //initialized to -1 to allow for only setting response time once
 };
 
-//default constructor, does nothing
-Process::Process() {
+//default constructor, does nothing (then why do you need it?)
+//Process::Process() {
+//}
 
-}
-
-//constructor to fill the process with the bursts and ID number
-Process::Process(vector<int> b, int n) {
-	bursts = b;
-	num = n;
-}
+// default constructor to fill the process with the bursts and ID number
+Process::Process(): bursts(b), num(n) { }
 
 //function to see if done with I/O
 bool Process::isIOcomplete(int time) {
-	if (ioTime <= time) { return true; } //returns true if the process has been in I/O long enough
+	if (ioTime <= time) { return true; }
 	else { return false; }
 }
 
+//function to help calculate response time
 void calcResponseTime(Process &a, int time) {
-	if (a.responseTime < 0) { a.responseTime = time; } //sets the response time to the time the process is first executed
+	if (a.responseTime < 0) { a.responseTime = time; }
 }
 
 //function for the FCFS implementation
