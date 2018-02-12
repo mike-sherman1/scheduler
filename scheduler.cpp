@@ -1,5 +1,6 @@
-//TODO: way too many comments, finish 3rd algo, error catching
-//left off at trying to fix default constructor stuff
+//TODO: way too many comments, too much output, finish 3rd algo, function for sim results, maybe a main menu, error catching
+//research default constructor stuff, cant get it to work
+//left off at comments
 
 #include <vector>
 #include <iostream>
@@ -10,23 +11,26 @@ using namespace std;
 //a class to represent a process 
 class Process {
 public:
-	//Process(); 
-	Process(vector<int>, int); //constructor to fill the process with the bursts and ID number
-	bool isIOcomplete(int); //function to see if done with I/O
-	vector<int> bursts; //vector of ints containing CPU and I/O bursts
-	int ioTime = 0; //at what time I/O will be finished
-	int num; //process ID number, i.e. P1, P4, etc.
+	Process(); 
+	Process(vector<int>, int);
+	bool isIOcomplete(int);
+	
+	vector<int> bursts; 
+	int num;
+	int ioTime = 0; 
 	int waitingTime = 0; 
 	int turnaroundTime = 0;
-	int responseTime = -1; //initialized to -1 to allow for only setting response time once
+	int responseTime = -1; //initialized to -1 to allow for only setting response time once 
 };
 
-//default constructor, does nothing (then why do you need it?)
-//Process::Process() {
-//}
+Process::Process() {
+}
 
-// default constructor to fill the process with the bursts and ID number
-Process::Process(): bursts(b), num(n) { }
+//constructor to fill the process with the bursts and ID number
+Process::Process(vector<int> b, int n) { 
+	bursts = b;
+	num = n; 
+}
 
 //function to see if done with I/O
 bool Process::isIOcomplete(int time) {
@@ -39,25 +43,27 @@ void calcResponseTime(Process &a, int time) {
 	if (a.responseTime < 0) { a.responseTime = time; }
 }
 
-//function for the FCFS implementation
-void FCFS(vector<Process> readyQ) { //takes a vector of processes as input, will represent ready queue
-	int time = 0; //current timer
-	int notUtilized = 0; //counter variable used to calculate CPU utilization later
-	vector<Process> IO; //represents processes currently in I/O
-	vector<Process> completedP; //completed processes
-	Process realTime; //used for the sample of dynamic output
-	bool completed = false; //used to exit loop when all processes are completed
+//first come first serve implementation
+void FCFS(vector<Process> readyQ) {
+	//variable initializations, maybe do this inside of loop
+	int time = 0;
+	int notUtilized = 0;
+	vector<Process> IO;
+	vector<Process> completedP;
+	Process realTime;
+	bool completed = false;
 
 	while (!completed) {
 		int i = 0;
+		
 		//this loop tests all processes in I/O to see if they are done, and puts them at the end of the 
 		//ready queue if they are
 		while (!IO.empty() && i < IO.size()) {
-			if (IO[i].isIOcomplete(time)) { //if current I/O process is done
-				readyQ.push_back(IO[i]); //add it to end of ready queue
-				swap(IO[i], IO.back()); //swap it with process in back of container
-				IO.pop_back(); //delete back process
-				i--; //move counter backward to check new process in this position
+			if (IO[i].isIOcomplete(time)) {
+				readyQ.push_back(IO[i]);
+				swap(IO[i], IO.back());
+				IO.pop_back();
+				i--;
 			}
 			i++;
 		}
